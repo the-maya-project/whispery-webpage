@@ -6,17 +6,16 @@ import router from './router'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCoffee } from '@fortawesome/free-solid-svg-icons'
+import { faGhost, faEye, faClock, faChevronUp, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import firebase from 'firebase'
-import firebaseConfig from '../config/firebase.js'
+const firebase = require('../config/firebaseConfig.js')
 
-library.add(faCoffee)
+library.add(faGhost, faEye, faClock, faChevronUp, faUser)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.use(Buefy, {
-  defaultIconComponent: 'vue-fontawesome',
+  defaultIconComponent: 'font-awesome-icon',
   defaultIconPack: 'fas'
 })
 
@@ -24,11 +23,10 @@ Vue.config.productionTip = false
 
 let app = ''
 
-firebase.initializeApp(firebaseConfig)
-
-firebase.auth().onAuthStateChanged(() => {
+firebase.auth.onAuthStateChanged(() => {
   if (!app) {
     app = new Vue({
+      el: '#app',
       router,
       render: h => h(App)
     }).$mount('#app')
