@@ -9,7 +9,7 @@
 import firebase from 'firebase'
 
 export default {
-  name: 'HelloWorld',
+  name: 'Home',
   data () {
     return {
       msg: 'Congrats, you have logged in to Whispery!'

@@ -1,44 +1,42 @@
 <template>
   <section>
-    <div class="container" id="postcard">
-      <div class="post">
-        <h2>Hello this is my first post yoohoooooooooo</h2>
+    <div class="container" id="postcard" v-for="post in postData" v-bind:key="post">
+      <div class="text">
+        <h2>{{ post.postContent }}</h2>
       </div>
 
       <div class="location">
-        <h6>Somewhere in SG</h6>
+        <h6>{{ post.postGeolocation }}</h6>
       </div>
 
       <div class="timestamp">
-        <h6><font-awesome-icon icon="clock" /> 5 min ago</h6>
+        <h6><font-awesome-icon icon="clock" /> {{ post.postTimestamp }}</h6>
       </div>
 
       <div class="user">
-        <font-awesome-icon icon="user" />
-        <h4>@anonyMOUSE</h4>
+        <h4><font-awesome-icon icon="user" /> {{ post.uid }}</h4>
       </div>
 
-      <vote>
-        <font-awesome-icon icon="chevron-up" />
-      </vote>
+      <div class="vote">
+        <h3><font-awesome-icon icon="chevron-up" /> {{ post.postLikes }}</h3>
+      </div>
     </div>
   </section>
 </template>
 
 <script>
-
-const Vote = {
-  props: ['title'],
-  template: '<h3>{{ title }}</h3>'
-}
-
 export default {
-  components: {
-    Vote
+  name: 'Post',
+  props: {
+    postData: Array
   },
   data () {
     return {
-      msg: 'Vote here!'
+      text: 'Hello this is my first post yoohoooooooooo',
+      location: 'Somewhere in SG',
+      timestamp: '5 min ago',
+      user: '@anonyMOUSE',
+      vote: 0
     }
   }
 }
@@ -58,7 +56,7 @@ export default {
 
   .location {
     position: absolute;
-    bottom: 10px;
+    bottom: 30px;
     left: 10px;
   }
 
