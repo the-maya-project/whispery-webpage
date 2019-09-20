@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import { store } from './store.js'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -21,15 +22,17 @@ Vue.use(Buefy, {
 
 Vue.config.productionTip = false
 
+// To handle page reloads
 let app = ''
 
-firebase.auth.onAuthStateChanged(() => {
+firebase.auth.onAuthStateChanged(user => {
   if (!app) {
     app = new Vue({
       el: '#app',
       router,
+      store,
       render: h => h(App)
-    }).$mount('#app')
+    })
   }
 })
 

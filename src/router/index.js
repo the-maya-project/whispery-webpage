@@ -1,34 +1,28 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
-import Post from '@/components/Post'
 import Login from '@/components/Login'
-import SignUp from '@/components/SignUp'
 import Feed from '@/components/Feed'
 import firebase from 'firebase'
 
 Vue.use(Router)
 
 const router = new Router({
+  // To allow more readable URL paths (/path) instead of default (/#/path)
   mode: 'history',
   routes: [
     {
       path: '*',
-      redirect: '/login'
+      redirect: '/feed'
     },
     {
       path: '/',
-      redirect: '/login'
+      redirect: '/feed'
     },
     {
       path: '/login',
       name: 'Login',
       component: Login
-    },
-    {
-      path: '/signup',
-      name: 'Sign Up',
-      component: SignUp
     },
     {
       path: '/home',
@@ -42,20 +36,6 @@ const router = new Router({
       path: '/feed',
       name: 'Feed',
       component: Feed,
-      data: {
-        title: 'Feed Page'
-      },
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/post',
-      name: 'Post',
-      component: Post,
-      data: {
-        title: 'Post Page'
-      },
       meta: {
         requiresAuth: true
       }
@@ -69,11 +49,12 @@ router.beforeEach((to, from, next) => {
 
   if (requiresAuth && !currentUser) {
     console.log(currentUser)
-    next('login')
-  } else if (!requiresAuth && currentUser) {
+    next('/login')
+  } else if (requiresAuth && currentUser) {
     console.log('else if ' + currentUser)
-    next('home')
+    next()
   } else {
+    console.log('else')
     next()
   }
 })

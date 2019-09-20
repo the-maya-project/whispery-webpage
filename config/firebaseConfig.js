@@ -18,21 +18,12 @@ const database = firebase.firestore()
 const auth = firebase.auth()
 const currentUser = auth.currentUser
 
-// Date issue fix by Firebase
-// const settings = {
-//   timestampsInSnapshots: true
-// }
-
-// database.settings(settings)
-
 // Firebase Collections
-const subscriptionCollection = database.collection('subscription')
 const postsCollection = database.collection('posts')
 
 export {
   database,
   auth,
   currentUser,
-  subscriptionCollection,
   postsCollection
 }
