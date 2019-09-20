@@ -6,11 +6,11 @@
       </div>
 
       <div class="location">
-        <h6>{{ post.postGeolocation }}</h6>
+        <h6>{{ post.distance }}m away</h6>
       </div>
 
       <div class="timestamp">
-        <h6><font-awesome-icon icon="clock" /> {{ post.postTimestamp }}</h6>
+        <h6><font-awesome-icon icon="clock" /> {{ post.postTimestamp | formatDate }}</h6>
       </div>
 
       <div class="user">
@@ -25,18 +25,26 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'Post',
   props: {
     postData: Array
   },
-  data () {
-    return {
-      text: 'Hello this is my first post yoohoooooooooo',
-      location: 'Somewhere in SG',
-      timestamp: '5 min ago',
-      user: '@anonyMOUSE',
-      vote: 0
+  filters: {
+    formatDate (val) {
+      if (!val) {
+        return '-'
+      }
+
+      let date = val.toDate()
+      return moment(date).fromNow()
+    },
+    trimLength (val) {
+      if (val.length < 200) {
+        return `${val.substring(0, 200)}...`
+      }
     }
   }
 }
@@ -56,7 +64,7 @@ export default {
 
   .location {
     position: absolute;
-    bottom: 30px;
+    bottom: 10px;
     left: 10px;
   }
 
