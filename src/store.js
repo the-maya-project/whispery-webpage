@@ -3,7 +3,15 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-// const firebase = require('../config/firebaseConfig.js')
+const firebase = require('../config/firebaseConfig.js')
+
+// Handle page reload
+firebase.auth.onAuthStateChanged(user => {
+  if (user) {
+    store.commit('setCurrentUser', user)
+    // store.dispatch('fetchUserProfile')
+  }
+})
 
 export const store = new Vuex.Store({
   state: {
@@ -20,10 +28,15 @@ export const store = new Vuex.Store({
     //     console.log(err)
     //   })
     // }
+
+    clearData ({ commit }) {
+      commit('setCurrentUser', null)
+      // commit('setUserProfile', {})
+    }
   },
   mutations: {
-    setCurrentUser (state, val) {
-      state.currentUser = val
+    setCurrentUser (state, value) {
+      state.currentUser = value
     }
     // setUserProfile (state, val) {
     //   state.userProfile = val
