@@ -25,6 +25,7 @@ export default {
   },
   data () {
     return {
+      posts: [],
       newPostContent: '',
       latitude: -1,
       longitude: -1,
