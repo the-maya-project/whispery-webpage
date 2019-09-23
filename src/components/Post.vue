@@ -1,24 +1,24 @@
 <template>
   <section>
-    <div class="container" id="postcard" v-for="post in postData" v-bind:key="post">
+    <div class="container" id="postcard">
       <div class="text">
-        <h2>{{ post.postContent }}</h2>
+        <h2>{{ postData.postContent }}</h2>
       </div>
 
       <div class="location">
-        <h6>{{ post.distance }}m away</h6>
+        <h6>{{ postData.distance }}m away</h6>
       </div>
 
       <div class="timestamp">
-        <h6><font-awesome-icon icon="clock" /> {{ post.postTimestamp | formatDate }}</h6>
+        <h6><font-awesome-icon icon="clock" /> {{ postData.postTimestamp | formatDate }}</h6>
       </div>
 
       <div class="user">
-        <h4><font-awesome-icon icon="user" /> {{ post.uid }}</h4>
+        <h4><font-awesome-icon icon="user" /> {{ postData.uid }}</h4>
       </div>
 
       <div class="vote">
-        <h3><font-awesome-icon icon="chevron-up" /> {{ post.postLikes }}</h3>
+        <h3><font-awesome-icon icon="chevron-up" /> {{ postData.postLikes }}</h3>
       </div>
     </div>
   </section>
@@ -30,7 +30,7 @@ import moment from 'moment'
 export default {
   name: 'Post',
   props: {
-    postData: Array
+    postData: Object
   },
   filters: {
     formatDate (val) {
@@ -59,7 +59,8 @@ export default {
     padding: 10px;
     height: 150px;
     width: 40%;
-    align-self: center
+    align-self: center;
+    margin-bottom: 5px
   }
 
   .location {

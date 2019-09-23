@@ -1,33 +1,45 @@
 <template>
   <section>
     <div class="container">
-      <!-- Pass an object, defined in the `retrievePosts()` method -->
-      <Post :postData="posts"></Post>
+      <div v-for="post in posts" v-bind:key="post">
+        <Post :postData="post"></Post>
+      </div>
+      <CreatePost v-on:submittingPost="createPost" v-on:increment="counter++"></CreatePost>
     </div>
   </section>
 </template>
 
 <script>
 import Post from '@/components/Post'
-const fb = require('../../config/firebaseConfig.js')
+import CreatePost from '@/components/CreatePost'
+// import { now } from 'moment'
+import { firestore } from 'firebase'
+import { mapState } from 'vuex'
+const firebase = require('../../config/firebaseConfig.js')
 
 export default {
   name: 'feed',
   components: {
-    Post
+    Post,
+    CreatePost
   },
   data () {
     return {
-      msg: 'Vote here!',
-      posts: []
+      newPostContent: '',
+      latitude: -1,
+      longitude: -1,
+      newPos: null
     }
+  },
+  computed: {
+    ...mapState(['currentUser', 'posts'])
   },
   beforeMount () {
     this.retrievePosts()
   },
   methods: {
     retrievePosts () {
-      fb.postsCollection.get()
+      firebase.postsCollection.get()
         .then(snapshot => {
           if (snapshot.empty) {
             console.log('No matching documents.')
@@ -54,32 +66,62 @@ export default {
         .catch(err => {
           console.log('Error getting documents', err)
         })
+    },
+    createPost (content) {
+      // Fetch coordinates
+      // this.newPos = this.fetchLocation
+      // console.log('Fetched position: ', this.newPos)
+
+      this.newPostContent = content
+      console.log(content)
+
+      // Submit new post to Firebase
+      firebase.postsCollection.add({
+        distance: 0,
+        postCommentCount: 0,
+        postContent: this.newPostContent,
+        postGeolocation: new firestore.GeoPoint(0.00, 0.00),
+        postLatitude: 0.00,
+        postLongitude: 0.00,
+        postLikes: 0,
+        postTimestamp: firestore.Timestamp.now(),
+        type: 'post',
+        uid: 'testest'
+      }).then(ref => {
+        this.newPostContent = ''
+        // this.newPos = null
+      }).catch(err => {
+        console.log(err)
+      })
     }
   }
+  // computed: {
+  //   fetchLocation: function () {
+  //     let pos = null
+  //     // listen to Cordova event
+  //     Vue.cordova.on('deviceready', () => {
+  //       console.log('Cordova : device is ready !')
+  //     }).then(pos => {
+  //       Vue.cordova.geolocation.getCurrentPosition((position) => {
+  //         pos = position
+  //         // this.latitude = position.coords.latitude
+  //         // this.longitude = position.coords.longitude
+  //         window.alert('Current position : ' + position.coords.latitude + ',' + position.coords.longitude)
+  //       }, (error) => {
+  //         window.alert('FAILED Error #' + error.code + ' ' + error.message)
+  //       }, {
+  //         timeout: 1000,
+  //         enableHighAccuracy: true
+  //       })
+  //       console.log(pos.coords.latitude, ', ', pos.coords.longitude)
+  //     })
+
+  //     return pos
+  //   }
+  // }
 }
 </script>
 
 <style>
-  #postcard {
-    border: 2px;
-    border-color: #42b983;
-    border-style: solid;
-    color: #000000;
-    padding: 10px;
-    height: 150px;
-    width: 40%;
-    align-self: center
-  }
 
-  .location {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-  }
-
-  .timestamp {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-  }
 </style>

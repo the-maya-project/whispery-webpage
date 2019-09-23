@@ -10,6 +10,19 @@ firebase.auth.onAuthStateChanged(user => {
   if (user) {
     store.commit('setCurrentUser', user)
     // store.dispatch('fetchUserProfile')
+
+    // Realtime updates from our posts collection
+    firebase.postsCollection.orderBy('distance', 'desc').onSnapshot(querySnapshot => {
+      let posts = []
+
+      querySnapshot.forEach(doc => {
+        let post = doc.data()
+        post.id = doc.id
+        posts.push(post)
+      })
+
+      store.commit('setPosts', posts)
+    })
   }
 })
 
@@ -37,6 +50,9 @@ export const store = new Vuex.Store({
   mutations: {
     setCurrentUser (state, value) {
       state.currentUser = value
+    },
+    setPosts (state, value) {
+      state.posts = value
     }
     // setUserProfile (state, val) {
     //   state.userProfile = val
