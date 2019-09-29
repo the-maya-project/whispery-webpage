@@ -1,10 +1,13 @@
 <template>
   <section>
-    <div class="container">
-      <div v-for="post in posts" v-bind:key="post">
-        <Post :postData="post"></Post>
-      </div>
-      <CreatePost v-on:submittingPost="createPost" v-on:increment="counter++"></CreatePost>
+    <b-field label="Decide your distance of reach">
+      <b-slider rounded id="radius_slider" v-model="postRadius" :max="10"></b-slider>
+    </b-field>
+    <CreatePost v-on:submittingPost="createPost" v-on:increment="counter++"></CreatePost>
+    <br>
+    <!-- <button class="button" type="button" @click="seeStates" /> -->
+    <div v-for="post in posts" v-bind:key="post">
+      <Post :postData="post"></Post>
     </div>
   </section>
 </template>
@@ -29,16 +32,23 @@ export default {
       newPostContent: '',
       latitude: -1,
       longitude: -1,
-      newPos: null
+      newPos: null,
+      postRadius: 5
+      // currentUser: this.$store.state.currentUser,
+      // posts: this.$store.state.posts
     }
   },
   computed: {
-    ...mapState(['currentUser', 'posts'])
+    ...mapState(['currentUsers', 'posts'])
   },
   beforeMount () {
     this.retrievePosts()
   },
   methods: {
+    seeStates () {
+      alert('$store: ', this.currentUser)
+      alert('$store: ', this.posts)
+    },
     retrievePosts () {
       firebase.postsCollection.get()
         .then(snapshot => {
@@ -124,5 +134,9 @@ export default {
 </script>
 
 <style>
-
+#radius_slider {
+  box-sizing: inherit;
+  padding-left: 25%;
+  padding-right: 25%;
+}
 </style>
