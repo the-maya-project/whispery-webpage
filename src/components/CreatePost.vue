@@ -12,7 +12,7 @@
 
         <!-- <form @submit.prevent> -->
           <section class="modal-card-body">
-            <b-field label="tweet tweet bij">
+            <b-field label="tweet tweet">
               <b-input maxlength="200" type="textarea" v-model="postContent"></b-input>
             </b-field>
           </section>
@@ -40,6 +40,7 @@ export default {
     submitPost (event) {
       this.$emit('submittingPost', this.postContent)
       this.closeModal()
+      this.postContent = ''
       console.log('clicked')
     },
     closeModal () {
