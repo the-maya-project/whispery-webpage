@@ -7,11 +7,11 @@ import { store } from './store.js'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faGhost, faEye, faClock, faChevronUp, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faGhost, faEye, faClock, faChevronUp, faUser, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 const firebase = require('../config/firebaseConfig.js')
 
-library.add(faGhost, faEye, faClock, faChevronUp, faUser)
+library.add(faGhost, faEye, faClock, faChevronUp, faUser, faChevronDown)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

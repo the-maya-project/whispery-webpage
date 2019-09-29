@@ -14,11 +14,14 @@
       </div>
 
       <div class="user">
+        <br>
         <h4><font-awesome-icon icon="user" /> {{ postData.uid }}</h4>
       </div>
 
       <div class="vote">
-        <h3><font-awesome-icon icon="chevron-up" /> {{ postData.postLikes }}</h3>
+        <font-awesome-icon icon="chevron-up" @click="like"/>
+        <h3>{{ postData.postLikes }}</h3>
+        <font-awesome-icon icon="chevron-down" @click="dislike" />
       </div>
     </div>
   </section>
@@ -38,6 +41,7 @@ export default {
         return '-'
       }
 
+      // let date = new Date(val)
       let date = val.toDate()
       return moment(date).fromNow()
     },
@@ -56,7 +60,7 @@ export default {
     border-color: #42b983;
     border-style: solid;
     color: #000000;
-    padding: 10px;
+    padding: 10px 25px 10px 25px;
     height: 150px;
     width: 40%;
     align-self: center;
@@ -73,5 +77,19 @@ export default {
     position: absolute;
     bottom: 10px;
     right: 10px;
+  }
+
+  .vote {
+    position: absolute;
+    right: 10px;
+    bottom: 40px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  h3 {
+    font-size: 18px;
   }
 </style>
