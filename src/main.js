@@ -3,42 +3,35 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import { store } from './store.js'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCoffee } from '@fortawesome/free-solid-svg-icons'
+import { faGhost, faEye, faClock, faChevronUp, faUser, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import firebase from 'firebase'
-import firebaseConfig from '../config/firebase.js'
+const firebase = require('../config/firebaseConfig.js')
 
-library.add(faCoffee)
+library.add(faGhost, faEye, faClock, faChevronUp, faUser, faChevronDown)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.use(Buefy, {
-  defaultIconComponent: 'vue-fontawesome',
+  defaultIconComponent: 'font-awesome-icon',
   defaultIconPack: 'fas'
 })
 
 Vue.config.productionTip = false
 
+// To handle page reloads
 let app = ''
 
-firebase.initializeApp(firebaseConfig)
-
-firebase.auth().onAuthStateChanged(() => {
+firebase.auth.onAuthStateChanged(user => {
   if (!app) {
     app = new Vue({
+      el: '#app',
       router,
+      store,
       render: h => h(App)
-    }).$mount('#app')
+    })
   }
-})
-
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
 })

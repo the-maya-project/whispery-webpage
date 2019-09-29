@@ -1,0 +1,61 @@
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+const firebase = require('../config/firebaseConfig.js')
+
+// Handle page reload
+firebase.auth.onAuthStateChanged(user => {
+  if (user) {
+    store.commit('setCurrentUser', user)
+    // store.dispatch('fetchUserProfile')
+
+    // Realtime updates from our posts collection
+    firebase.postsCollection.orderBy('distance', 'desc').onSnapshot(querySnapshot => {
+      let posts = []
+
+      querySnapshot.forEach(doc => {
+        let post = doc.data()
+        post.id = doc.id
+        posts.push(post)
+      })
+
+      store.commit('setPosts', posts)
+    })
+  }
+})
+
+export const store = new Vuex.Store({
+  state: {
+    currentUser: null
+    // userProfile: {}
+  },
+  actions: {
+    // fetchUserProfile ({ commit, state }) {
+    //   firebase.usersCollection.doc(state.currentUser.uid).get().then(
+    //     res => {
+    //       commit('setUserProfile', res.data())
+    //     }
+    //   ).catch(err => {
+    //     console.log(err)
+    //   })
+    // }
+
+    clearData ({ commit }) {
+      commit('setCurrentUser', null)
+      // commit('setUserProfile', {})
+    }
+  },
+  mutations: {
+    setCurrentUser (state, value) {
+      state.currentUser = value
+    },
+    setPosts (state, value) {
+      state.posts = value
+    }
+    // setUserProfile (state, val) {
+    //   state.userProfile = val
+    // }
+  }
+})
